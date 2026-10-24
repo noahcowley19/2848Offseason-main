@@ -1,0 +1,167 @@
+package frc.robot.subsystems;
+
+import static edu.wpi.first.units.Units.Volts;
+import static frc.robot.Constants.ShooterConstants.*;
+import static frc.robot.RangerHelpers.*;
+
+import java.util.regex.Matcher;
+
+import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.controls.*;
+import com.ctre.phoenix6.hardware.*;
+import com.ctre.phoenix6.signals.*;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.RobotContainer;
+import lombok.Getter;
+import lombok.Setter;
+
+/** Shooter Subsystem. */
+public class Shooter extends SubsystemBase {
+  private final TalonFX m_FlywheelLeftLeader;
+  private final TalonFX m_FlywheelRightFollower;
+
+
+  @Getter @Setter private boolean shooting = false;
+
+
+  @Getter private boolean reversing = false;
+  
+  private final TalonFX m_Turret;
+  private final CANcoder m_TurretCANcoder;
+
+  private final MotionMagicVoltage turretRequest = new MotionMagicVoltage(0);
+
+
+
+  private final CANrange m_MagazineSensor = new CANrange(kCANRangeID);
+  private final CANrangeConfiguration magazineSensorConfig = new CANrangeConfiguration();
+
+
+  // private final Debouncer currentDebouncer = new Debouncer(0.167, DebounceType.kBoth);
+
+  private final TalonFX m_Magazine;
+
+
+  private double targetTheta;
+  private double distance;
+  private double turrentSetPoint;
+
+
+  
+  // create a Motion Magic request, voltage output
+
+
+  //private final PositionVoltage m_HoodVoltage = new PositionVoltage(0).withSlot(0);
+
+  //private @Getter double m_FlywheelOutputDutyCycle = 0;
+  public enum TurretMode { TRACK, HOLD }
+  private final PositionVoltage m_TurretRequest = new PositionVoltage(0).withSlot(0);
+  @Getter private TurretMode turretMode = TurretMode.HOLD;
+  private double holdAngleRad = 0;
+  @Getter private double aimTrimRad = 0;
+  @Getter private Translation2d turretTarget = new Translation2d();
+  @Getter private double targetDistanceMeters = 0;
+  @Getter private double turretSetpointRotations = 0;
+  private double turretFeedforwardRps = 0;
+  private boolean setpointClamped = false;
+  private Translation2d lastFeedTarget = null;
+
+  
+
+  /** Shooter Subsystem. */
+  public Shooter() {
+    m_FlywheelLeftLeader = new TalonFX(kFlywheelLeftMotorID);
+    m_FlywheelRightFollower = new TalonFX(kFlywheelRightMotorID);
+    m_Turret = new TalonFX(kTurretMotorID);
+    m_TurretCANcoder = new CANcoder(kTurretCANcoderID);
+    m_Magazine = new TalonFX(kMagazineMotorID);
+
+    TalonFXConfiguration flywheelConfig = new TalonFXConfiguration();
+    flywheelConfig.Slot0.kS = kFlywheelkS;
+    flywheelConfig.Slot0.kV = kFlywheelkV;
+    flywheelConfig.Slot0.kP = kFlywheelkP;//.000175;  
+    flywheelConfig.Slot0.kI = kFlywheelkI;
+    flywheelConfig.Slot0.kD = kFlywheelkD;
+    flywheelConfig.Slot0.kA = kFlywheelkA;
+    flywheelConfig.Voltage
+        .withPeakForwardVoltage(Volts.of(kFlywheelPeakVoltage))
+        .withPeakReverseVoltage(Volts.of(-1 * kFlywheelPeakVoltage));
+    flywheelConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    setupTalonFx(m_FlywheelLeftLeader, flywheelConfig);
+    m_FlywheelRightFollower.setControl(new Follower(m_FlywheelLeftLeader.getDeviceID(), MotorAlignmentValue.Aligned));
+
+    TalonFXConfiguration turretConfig = new TalonFXConfiguration();
+    turretConfig.Slot0.kS = kTurretkS;
+    turretConfig.Slot0.kV = kTurretkV;
+    turretConfig.Slot0.kA = kTurretkA;
+    turretConfig.Slot0.kP = kTurretkP;
+    turretConfig.Slot0.kI = kTurretkI;
+    turretConfig.Slot0.kD = kTurretkD;
+    turretConfig.Voltage
+        .withPeakForwardVoltage(Volts.of(kTurretPeakVoltage))
+        .withPeakReverseVoltage(Volts.of(-1 * kTurretPeakVoltage));
+    turretConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+    turretConfig.Feedback.FeedbackRemoteSensorID = kTurretCANcoderID;
+    //turretConfig.Feedback.SensorToMechanismRatio =-1;
+    turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    var motionMagicConfigs = turretConfig.MotionMagic;
+    motionMagicConfigs.MotionMagicCruiseVelocity = kTurretMMCruiseVelocity; 
+    motionMagicConfigs.MotionMagicAcceleration = kTurretMMAcceleration; 
+    motionMagicConfigs.MotionMagicJerk = kTurretMMJerk;
+    //CANcoderConfigurator turretCANcoderConfigurator = m_TurretCANcoder.getConfigurator();
+    m_TurretCANcoder.getConfigurator().apply(kTurretCANcoderMagnetSensorConfigs);
+    //retryConfigApply(() -> turretCANcoderConfigurator.apply(kTurretCANcoderMagnetSensorConfigs)); 
+    setupTalonFx(m_Turret, turretConfig);
+
+    SoftwareLimitSwitchConfigs turretSwitchConfigs = new SoftwareLimitSwitchConfigs();
+    turretSwitchConfigs.ForwardSoftLimitThreshold = kTurretSwitchForwardLimit;
+    turretSwitchConfigs.ReverseSoftLimitThreshold = kTurretSwitchReverseLimit;
+    turretSwitchConfigs.ForwardSoftLimitEnable = true;
+    turretSwitchConfigs.ReverseSoftLimitEnable = true;
+    m_Turret.getConfigurator().apply(turretSwitchConfigs);
+    
+    m_Turret.getConfigurator().apply(motionMagicConfigs);
+
+    m_TurretCANcoder.getConfigurator().apply(kTurretCANcoderMagnetSensorConfigs);
+    
+
+    TalonFXConfiguration magazineConfig = new TalonFXConfiguration();
+    magazineConfig.Slot0.kS = kMagazinekS;
+    magazineConfig.Slot0.kV = kMagazinekV;
+    magazineConfig.Slot0.kA = kMagazinekA;
+    magazineConfig.Slot0.kP = kMagazinekP;  
+    magazineConfig.Slot0.kI = kMagazinekI;
+    magazineConfig.Slot0.kD = kMagazinekD;
+    magazineConfig.Voltage
+        .withPeakForwardVoltage(Volts.of(kMagazinePeakVoltage))
+        .withPeakReverseVoltage(Volts.of(-1 * kMagazinePeakVoltage));
+    magazineConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    retryConfigApply(() -> m_Magazine.getConfigurator().apply(magazineConfig));
+
+    magazineSensorConfig.ProximityParams.ProximityThreshold =.13;
+    magazineSensorConfig.ProximityParams.MinSignalStrengthForValidMeasurement = 2000;
+    magazineSensorConfig.ToFParams.UpdateMode = UpdateModeValue.ShortRange100Hz;
+    m_MagazineSensor.getConfigurator().apply(magazineSensorConfig);
+  }
+public double getTurretAngle(){
+    
+    double rawAngle = m_Turret.getPosition().getValueAsDouble() * 2 * Math.PI;
+    double shiftedAngle = rawAngle + Math.PI/2;
+    double wrapped = MathUtil.angleModulus(shiftedAngle);
+
+    return wrapped;
+}
+public void perdiodic(){
+  //targetTheta = (RobotContainer.getDrivetrain().getTargetTheta());
+
+}
+}
