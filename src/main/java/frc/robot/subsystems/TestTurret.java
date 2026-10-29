@@ -4,6 +4,7 @@ import static frc.robot.Constants.ShooterConstants.kMaxTurretRad;
 import static frc.robot.Constants.ShooterConstants.kMinTurretRad;
 import static frc.robot.Constants.ShooterConstants.kTurretCANcoderID;
 import static frc.robot.Constants.ShooterConstants.kTurretMotorID;
+import static frc.robot.RangerHelpers.retryConfigApply;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -26,7 +27,7 @@ public class TestTurret extends SubsystemBase{
      private double position = 0;
      private double error = 0;
      private double dcycOutput = 0;
-     private double offset = -0.327393;
+     private double offset = 0.327393;
      private double kTestVolts = 2;
      private boolean closedLoop = true;
 
@@ -36,8 +37,8 @@ public class TestTurret extends SubsystemBase{
         TalonFXConfiguration config = new TalonFXConfiguration();
         CANcoderConfiguration CANconfig = new CANcoderConfiguration();
         CANconfig.MagnetSensor.MagnetOffset = offset;
-        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        m_Encoder.getConfigurator().apply(CANconfig);
+        //config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        retryConfigApply(()->m_Encoder.getConfigurator().apply(CANconfig));
      }
      public void periodic(){
 
@@ -62,7 +63,7 @@ public class TestTurret extends SubsystemBase{
      }
      public void setTarget(double radians)
      {
-        target = MathUtil.clamp(radians, kMinTurretRad, kMaxTurretRad);
+        target = radians; //MathUtil.clamp(radians, kMinTurretRad, kMaxTurretRad);
      }
      public Command goTo(double radians)
      {
@@ -95,8 +96,12 @@ public class TestTurret extends SubsystemBase{
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
         builder.addDoubleProperty("Turret Angle",
-        null,
+        ()->target,
         value -> setTarget(value));
+
+        builder.addDoubleProperty("Measured Angle",
+        ()->m_Encoder.getAbsolutePosition().getValueAsDouble(),
+        null);
 
         
 
