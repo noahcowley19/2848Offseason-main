@@ -62,7 +62,7 @@ public class TestTurret extends SubsystemBase{
 
       robotToHub = RobotContainer.getDrivetrain().getState().Pose.getTranslation().minus(redHubPose);
 
-      angleToHub = robotToHub.getAngle().getRadians();
+      angleToHub = Math.atan2(robotToHub.getY(),robotToHub.getX());
 
 
 
