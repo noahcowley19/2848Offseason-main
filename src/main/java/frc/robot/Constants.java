@@ -99,6 +99,8 @@ public final class Constants {
     public static final double kTurretTrimStepRad = Math.toRadians(1.0);
     public static final double kTurretMinFeedforwardDistance = 0.5;
     public static final double kFeedTargetHysteresis = 0.5;
+    public static final double kMinTurretRad = Math.PI/4;
+    public static final double kMaxTurretRad = 3*Math.PI/4;
 
     public static final double kTurretOffset = -.033;
 
@@ -119,6 +121,8 @@ public final class Constants {
     public static final double kFlywheelkP = .4;//3;  
     public static final double kFlywheelkI = 0.1;
     public static final double kFlywheelkD = 0.0;
+
+    
 
     public static final double kTurretkS = 0.0;
     public static final double kTurretkV = .12;

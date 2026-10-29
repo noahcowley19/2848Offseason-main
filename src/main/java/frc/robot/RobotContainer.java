@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.TestTurret;
 import lombok.Getter;
 import frc.robot.subsystems.TestTurret;
 public class RobotContainer {
@@ -38,13 +39,17 @@ public class RobotContainer {
 
     @Getter public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     //@Getter public static final Shooter shooter = new Shooter();
-    //@Getter public static final NewVision vision = new NewVision();
+    @Getter public static final NewVision vision = new NewVision();
+    public static final TestTurret turret = new TestTurret();
 
-    @Getter public static final TestTurret t = new TestTurret();
-
+    
     public RobotContainer() {
         configureBindings();
     }
+
+
+
+    
 
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
@@ -82,7 +87,15 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        t.setDefaultCommand(Commands.idle(t));
+
+        drivetrain.registerTelemetry(logger::telemeterize);
+
+        joystick.rightBumper().whileTrue(turret.runVolts());
+        joystick.povUp().onTrue(turret.goToDeg(0));
+        joystick.povLeft().onTrue(turret.goToDeg(45));
+        joystick.povRight().onTrue(turret.goToDeg(-45));
+        joystick.povDown().onTrue(turret.goToDeg(5));
+
     }
 
     public Command getAutonomousCommand() {
