@@ -38,6 +38,8 @@ public class TestTurret extends SubsystemBase{
      private boolean closedLoop = true;
      
      private double angleToHub = 0;
+     private double heading = 0;
+     private double correction = 0;
 
      private double tempTarget = 0;
 
@@ -60,9 +62,21 @@ public class TestTurret extends SubsystemBase{
 
        position = m_Encoder.getAbsolutePosition().getValueAsDouble() * Math.PI*2;
 
+       heading = RobotContainer.getDrivetrain().getState().Pose.getRotation().getRadians();
+
+
+
+
       robotToHub = RobotContainer.getDrivetrain().getState().Pose.getTranslation().minus(redHubPose);
 
       angleToHub = Math.atan2(robotToHub.getY(),robotToHub.getX());
+
+      correction = angleToHub-heading;
+
+      setTarget(correction);
+      
+
+
 
 
 
