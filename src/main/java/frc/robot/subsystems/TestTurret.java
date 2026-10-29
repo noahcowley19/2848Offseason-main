@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.ShooterConstants.kMaxTurretRad;
+import static frc.robot.Constants.ShooterConstants.kMinTurretRad;
 import static frc.robot.Constants.ShooterConstants.kTurretCANcoderID;
 import static frc.robot.Constants.ShooterConstants.kTurretMotorID;
 
@@ -8,7 +10,9 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TestTurret extends SubsystemBase{
@@ -21,8 +25,8 @@ public class TestTurret extends SubsystemBase{
      private double error = 0;
      private double dcycOutput = 0;
      private double offset = -0.327393;
-
-
+     private double kTestVolts = 2;
+     private boolean closedLoop = true;
 
      public TestTurret() {
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -46,10 +50,37 @@ public class TestTurret extends SubsystemBase{
         else if(dcycOutput<-100)
             dcycOutput = -100;
 
-        m_Turret.set(dcycOutput/100);
-
-
-
+        // skip closed loop while runVolts is driving the motor
+        if(closedLoop)
+            m_Turret.set(dcycOutput/100);
+     }
+     public void setTarget(double radians)
+     {
+        target = MathUtil.clamp(radians, kMinTurretRad, kMaxTurretRad);
+     }
+     public Command goTo(double radians)
+     {
+        return runOnce(() -> setTarget(radians));
+     }
+     public Command goToDeg(double degrees)
+     {
+        return goTo(Math.toRadians(degrees));
+     }
+     public Command runVolts()
+     {
+        return startEnd(
+            () -> {
+                closedLoop = false;
+                m_Turret.setVoltage(kTestVolts);
+            },
+            () -> {
+                setTarget(position);
+                closedLoop = true;
+            });
+     }
+     public boolean atTarget()
+     {
+        return Math.abs(error) < Math.toRadians(2);
      }
 
 
