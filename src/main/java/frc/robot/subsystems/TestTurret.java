@@ -9,6 +9,8 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -47,7 +49,11 @@ public class TestTurret extends SubsystemBase{
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+
+        config.MotorOutput.Inverted=InvertedValue.Clockwise_Positive;
         CANcoderConfiguration CANconfig = new CANcoderConfiguration();
+
+        CANconfig.MagnetSensor.SensorDirection=SensorDirectionValue.Clockwise_Positive;
         CANconfig.MagnetSensor.MagnetOffset = offset;
         retryConfigApply(()->m_Encoder.getConfigurator().apply(CANconfig));
         m_Turret.getConfigurator().apply(config);
@@ -71,7 +77,7 @@ public class TestTurret extends SubsystemBase{
 
       robotToHub = redHubPose.minus(RobotContainer.getDrivetrain().getState().Pose.getTranslation());
 
-      angleToHub = MathUtil.angleModulus(Math.atan2(robotToHub.getY(),robotToHub.getX()));
+      angleToHub = MathUtil.angleModulus(robotToHub.getAngle().getRadians());
 
       correction = MathUtil.angleModulus(angleToHub-heading);
 
