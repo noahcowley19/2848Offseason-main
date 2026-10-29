@@ -88,106 +88,106 @@ public class NewVision extends SubsystemBase{
 
         builder.addStringArrayProperty("cameraList", ()->cameraList, null);
         
-        builder.addDoubleProperty(cameraList[0] + " Last update",
-        ()->cameraMap.get(cameraList[0]).getEst().timestampSeconds,
-        null);
+        // builder.addDoubleProperty(cameraList[0] + " Last update",
+        // ()->cameraMap.get(cameraList[0]).getEst().timestampSeconds,
+        // null);
         
-        builder.addDoubleProperty(cameraList[1] + " Last update",
-        ()->cameraMap.get(cameraList[1]).getEst().timestampSeconds,
-        null);
+        // builder.addDoubleProperty(cameraList[1] + " Last update",
+        // ()->cameraMap.get(cameraList[1]).getEst().timestampSeconds,
+        // null);
 
-        builder.addDoubleProperty(cameraList[2] + " Last update",
-        ()->cameraMap.get(cameraList[2]).getEst().timestampSeconds,
-        null);
+        // builder.addDoubleProperty(cameraList[2] + " Last update",
+        // ()->cameraMap.get(cameraList[2]).getEst().timestampSeconds,
+        // null);
 
-        builder.addDoubleProperty(cameraList[3] + " Last update",
-        ()->cameraMap.get(cameraList[3]).getEst().timestampSeconds,
-        null);
+        // builder.addDoubleProperty(cameraList[3] + " Last update",
+        // ()->cameraMap.get(cameraList[3]).getEst().timestampSeconds,
+        // null);
 
 
-        builder.addBooleanProperty(cameraList[0] + " Has Tag",
-        ()->cameraMap.get(cameraList[0]).hasTag(),
-        null);
+        // builder.addBooleanProperty(cameraList[0] + " Has Tag",
+        // ()->cameraMap.get(cameraList[0]).hasTag(),
+        // null);
         
-        builder.addBooleanProperty(cameraList[1] + " Has Tag",
-        ()->cameraMap.get(cameraList[1]).hasTag(),
-        null);
+        // builder.addBooleanProperty(cameraList[1] + " Has Tag",
+        // ()->cameraMap.get(cameraList[1]).hasTag(),
+        // null);
 
-        builder.addBooleanProperty(cameraList[2] + " Has Tag",
-        ()->cameraMap.get(cameraList[2]).hasTag(),
-        null);
+        // builder.addBooleanProperty(cameraList[2] + " Has Tag",
+        // ()->cameraMap.get(cameraList[2]).hasTag(),
+        // null);
 
-        builder.addBooleanProperty(cameraList[3] + " Has Tag",
-        ()->cameraMap.get(cameraList[3]).hasTag(),
-        null);
-
-
-        builder.addBooleanProperty(cameraList[0] + " Is Valid",
-        ()->cameraMap.get(cameraList[0]).isValid(),
-        null);
-
-        builder.addBooleanProperty(cameraList[1] + " Is Valid",
-        ()->cameraMap.get(cameraList[1]).isValid(),
-        null);
-
-        builder.addBooleanProperty(cameraList[2] + " Is Valid",
-        ()->cameraMap.get(cameraList[2]).isValid(),
-        null);
-
-        builder.addBooleanProperty(cameraList[3] + " Is Valid",
-        ()->cameraMap.get(cameraList[3]).isValid(),
-        null);
+        // builder.addBooleanProperty(cameraList[3] + " Has Tag",
+        // ()->cameraMap.get(cameraList[3]).hasTag(),
+        // null);
 
 
-        builder.addDoubleArrayProperty(cameraList[0] + " Stdevs ", 
-        ()->cameraMap.get(cameraList[0]).getStdevs().getData(),
-         null);
+        // builder.addBooleanProperty(cameraList[0] + " Is Valid",
+        // ()->cameraMap.get(cameraList[0]).isValid(),
+        // null);
 
-         builder.addDoubleArrayProperty(cameraList[1] + " Stdevs ", 
-        ()->cameraMap.get(cameraList[1]).getStdevs().getData(),
-         null);
+        // builder.addBooleanProperty(cameraList[1] + " Is Valid",
+        // ()->cameraMap.get(cameraList[1]).isValid(),
+        // null);
 
-         builder.addDoubleArrayProperty(cameraList[2] + " Stdevs ", 
-        ()->cameraMap.get(cameraList[2]).getStdevs().getData(),
-         null);
+        // builder.addBooleanProperty(cameraList[2] + " Is Valid",
+        // ()->cameraMap.get(cameraList[2]).isValid(),
+        // null);
 
-         builder.addDoubleArrayProperty(cameraList[3] + " Stdevs ", 
-        ()->cameraMap.get(cameraList[3]).getStdevs().getData(),
-         null);
-
-
-         builder.addDoubleProperty(cameraList[0] + " Average FPS",
-         ()->cameraMap.get(cameraList[0]).getFpsRoller().getAverage(),
-         null);
-
-         builder.addDoubleProperty(cameraList[1] + " Average FPS",
-         ()->cameraMap.get(cameraList[1]).getFpsRoller().getAverage(),
-         null);
-
-         builder.addDoubleProperty(cameraList[2] + " Average FPS",
-         ()->cameraMap.get(cameraList[2]).getFpsRoller().getAverage(),
-         null);
-
-         builder.addDoubleProperty(cameraList[3] + " Average FPS",
-         ()->cameraMap.get(cameraList[3]).getFpsRoller().getAverage(),
-         null);
+        // builder.addBooleanProperty(cameraList[3] + " Is Valid",
+        // ()->cameraMap.get(cameraList[3]).isValid(),
+        // null);
 
 
-         builder.addDoubleProperty(cameraList[0] + " Average Ambiguity",
-         ()->cameraMap.get(cameraList[0]).getAmbiguityRoller().getAverage(),
-         null);
+        // builder.addDoubleArrayProperty(cameraList[0] + " Stdevs ", 
+        // ()->cameraMap.get(cameraList[0]).getStdevs().getData(),
+        //  null);
 
-         builder.addDoubleProperty(cameraList[1] + " Average Ambiguity",
-         ()->cameraMap.get(cameraList[1]).getAmbiguityRoller().getAverage(),
-         null);
+        //  builder.addDoubleArrayProperty(cameraList[1] + " Stdevs ", 
+        // ()->cameraMap.get(cameraList[1]).getStdevs().getData(),
+        //  null);
 
-         builder.addDoubleProperty(cameraList[2] + " Average Ambiguity",
-         ()->cameraMap.get(cameraList[2]).getAmbiguityRoller().getAverage(),
-         null);
+        //  builder.addDoubleArrayProperty(cameraList[2] + " Stdevs ", 
+        // ()->cameraMap.get(cameraList[2]).getStdevs().getData(),
+        //  null);
 
-         builder.addDoubleProperty(cameraList[3] + " Average Ambiguity",
-         ()->cameraMap.get(cameraList[3]).getAmbiguityRoller().getAverage(),
-         null);
+        //  builder.addDoubleArrayProperty(cameraList[3] + " Stdevs ", 
+        // ()->cameraMap.get(cameraList[3]).getStdevs().getData(),
+        //  null);
+
+
+        //  builder.addDoubleProperty(cameraList[0] + " Average FPS",
+        //  ()->cameraMap.get(cameraList[0]).getFpsRoller().getAverage(),
+        //  null);
+
+        //  builder.addDoubleProperty(cameraList[1] + " Average FPS",
+        //  ()->cameraMap.get(cameraList[1]).getFpsRoller().getAverage(),
+        //  null);
+
+        //  builder.addDoubleProperty(cameraList[2] + " Average FPS",
+        //  ()->cameraMap.get(cameraList[2]).getFpsRoller().getAverage(),
+        //  null);
+
+        //  builder.addDoubleProperty(cameraList[3] + " Average FPS",
+        //  ()->cameraMap.get(cameraList[3]).getFpsRoller().getAverage(),
+        //  null);
+
+
+        //  builder.addDoubleProperty(cameraList[0] + " Average Ambiguity",
+        //  ()->cameraMap.get(cameraList[0]).getAmbiguityRoller().getAverage(),
+        //  null);
+
+        //  builder.addDoubleProperty(cameraList[1] + " Average Ambiguity",
+        //  ()->cameraMap.get(cameraList[1]).getAmbiguityRoller().getAverage(),
+        //  null);
+
+        //  builder.addDoubleProperty(cameraList[2] + " Average Ambiguity",
+        //  ()->cameraMap.get(cameraList[2]).getAmbiguityRoller().getAverage(),
+        //  null);
+
+        //  builder.addDoubleProperty(cameraList[3] + " Average Ambiguity",
+        //  ()->cameraMap.get(cameraList[3]).getAmbiguityRoller().getAverage(),
+        //  null);
 
         
 
@@ -291,37 +291,6 @@ public class NewVision extends SubsystemBase{
     }
 
 
-    private int[][] detectOutlier(PoseEstHolder[] vals){
-
-        int[] xOutliers = new int[4];
-        int[] yOutliers = new int[4];
-        Arrays.fill(xOutliers, -1);
-        Arrays.fill(yOutliers,-1);
-        double[] xs = {vals[0].getEst().pose.getX(),vals[1].getEst().pose.getX(),vals[2].getEst().pose.getX(),vals[3].getEst().pose.getX()};
-        double[] ys = {vals[0].getEst().pose.getY(),vals[1].getEst().pose.getY(),vals[2].getEst().pose.getY(),vals[3].getEst().pose.getY()};
-        
-        
-        double xMedian = median(xs);
-        double yMedian = median(ys);
-
-        for (int i =0; i<4;i++){
-            if(xMedian +.3 < xs[i] || xMedian -.3 > xs[i]){
-                xOutliers[i] = 0;
-            }
-            if(yMedian +.3 < xs[i] || yMedian -.3 > xs[i]){
-                yOutliers[i] =0;
-            }
-        }
-
-
-
-        return new int[][]{xOutliers, yOutliers};
-    }
-
-    private double median(double[] vals){
-        Arrays.sort(vals);
-        return (vals[1]+vals[2])/2;
-    }
 
 
     public void setStandardDeviation(String camera){

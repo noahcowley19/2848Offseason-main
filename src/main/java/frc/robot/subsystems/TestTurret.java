@@ -12,6 +12,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -27,6 +28,8 @@ public class TestTurret extends SubsystemBase{
      private double offset = -0.327393;
      private double kTestVolts = 2;
      private boolean closedLoop = true;
+
+     private double tempTarget = 0;
 
      public TestTurret() {
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -84,6 +87,16 @@ public class TestTurret extends SubsystemBase{
      }
 
 
+
+     @Override
+    public void initSendable(SendableBuilder builder) {
+        super.initSendable(builder);
+        builder.addDoubleProperty("Turret Angle",
+        null,
+        value -> setTarget(value));
+
+        
+    }
         
 
 
