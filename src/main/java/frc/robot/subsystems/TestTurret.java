@@ -14,6 +14,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,6 +23,8 @@ import frc.robot.RobotContainer;
 public class TestTurret extends SubsystemBase{
      private final TalonFX m_Turret = new TalonFX(kTurretMotorID);
     private final CANcoder m_Encoder = new CANcoder(kTurretCANcoderID);
+
+    private Field2d field = new Field2d();
 
    private Translation2d robotToHub = new Translation2d();
     
@@ -46,6 +49,10 @@ public class TestTurret extends SubsystemBase{
         retryConfigApply(()->m_Encoder.getConfigurator().apply(CANconfig));
      }
      public void periodic(){
+
+      field.setRobotPose(RobotContainer.getDrivetrain().getState().Pose);
+
+      SmartDashboard.putData(field);
 
       SmartDashboard.putData(this);
 
