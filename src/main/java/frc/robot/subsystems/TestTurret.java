@@ -35,7 +35,7 @@ public class TestTurret extends SubsystemBase{
      private double position = 0;
      private double error = 0;
      private double dcycOutput = 0;
-     private double offset = 0.327393;
+     private double offset = -0.327881;
      private double kTestVolts = 2;
      private boolean closedLoop = true;
      
@@ -117,18 +117,18 @@ public class TestTurret extends SubsystemBase{
      {
         return goTo(Math.toRadians(degrees));
      }
-     public Command runVolts()
-     {
-        return startEnd(
-            () -> {
-                closedLoop = false;
-                m_Turret.setVoltage(kTestVolts);
-            },
-            () -> {
-                setTarget(position);
-                closedLoop = true;
-            });
-     }
+    //  public Command runVolts()
+    //  {
+    //     return startEnd(
+    //         () -> {
+    //             closedLoop = false;
+    //             m_Turret.setVoltage(kTestVolts);
+    //         },
+    //         () -> {
+    //             setTarget(position);
+    //             closedLoop = true;
+    //         });
+    //  }
      public boolean atTarget()
      {
         return Math.abs(error) < Math.toRadians(2);

@@ -89,8 +89,7 @@ public class RobotContainer {
 
 
         drivetrain.registerTelemetry(logger::telemeterize);
-
-        joystick.rightBumper().whileTrue(turret.runVolts());
+        
         joystick.povUp().onTrue(turret.goToDeg(0));
         joystick.povLeft().onTrue(turret.goToDeg(45));
         joystick.povRight().onTrue(turret.goToDeg(-45));
