@@ -45,10 +45,12 @@ public class TestTurret extends SubsystemBase{
 
      public TestTurret() {
         TalonFXConfiguration config = new TalonFXConfiguration();
+        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
         CANcoderConfiguration CANconfig = new CANcoderConfiguration();
         CANconfig.MagnetSensor.MagnetOffset = offset;
-        //config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         retryConfigApply(()->m_Encoder.getConfigurator().apply(CANconfig));
+        m_Turret.getConfigurator().apply(config);
      }
      public void periodic(){
 
@@ -67,11 +69,11 @@ public class TestTurret extends SubsystemBase{
 
 
 
-      robotToHub = RobotContainer.getDrivetrain().getState().Pose.getTranslation().minus(redHubPose);
+      robotToHub = redHubPose.minus(RobotContainer.getDrivetrain().getState().Pose.getTranslation());
 
-      angleToHub = Math.atan2(robotToHub.getY(),robotToHub.getX());
+      angleToHub = MathUtil.angleModulus(Math.atan2(robotToHub.getY(),robotToHub.getX()));
 
-      correction = angleToHub-heading;
+      correction = MathUtil.angleModulus(angleToHub-heading);
 
       setTarget(correction);
       
@@ -139,6 +141,8 @@ public class TestTurret extends SubsystemBase{
         ()->m_Encoder.getAbsolutePosition().getValueAsDouble(),
         null);
         builder.addDoubleProperty("Angle to Hub", ()-> angleToHub, null);
+
+        builder.addDoubleProperty("COrrectio", ()->correction,null);
 
         
 
