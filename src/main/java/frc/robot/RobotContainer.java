@@ -20,7 +20,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Shooter;
 import lombok.Getter;
-
+import frc.robot.subsystems.TestTurret;
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -38,7 +38,10 @@ public class RobotContainer {
 
     @Getter public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     //@Getter public static final Shooter shooter = new Shooter();
-    @Getter public static final NewVision vision = new NewVision();
+    //@Getter public static final NewVision vision = new NewVision();
+
+    @Getter public static final TestTurret t = new TestTurret();
+
     public RobotContainer() {
         configureBindings();
     }
@@ -78,6 +81,8 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        t.setDefaultCommand(Commands.idle(t));
     }
 
     public Command getAutonomousCommand() {

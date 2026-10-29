@@ -46,6 +46,7 @@ public class HopperTransition extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putData(this);
     }
 
     @Override
