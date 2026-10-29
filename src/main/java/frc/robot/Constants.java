@@ -99,8 +99,6 @@ public final class Constants {
     public static final double kTurretTrimStepRad = Math.toRadians(1.0);
     public static final double kTurretMinFeedforwardDistance = 0.5;
     public static final double kFeedTargetHysteresis = 0.5;
-    public static final double kMinTurretRad = Math.PI/4;
-    public static final double kMaxTurretRad = 3*Math.PI/4;
 
     public static final double kTurretOffset = -.033;
 

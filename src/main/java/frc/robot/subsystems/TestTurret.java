@@ -1,9 +1,8 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.ShooterConstants.kMaxTurretRad;
-import static frc.robot.Constants.ShooterConstants.kMinTurretRad;
 import static frc.robot.Constants.ShooterConstants.kTurretCANcoderID;
 import static frc.robot.Constants.ShooterConstants.kTurretMotorID;
+import static frc.robot.Constants.ShooterConstants.redHubPose;
 import static frc.robot.RangerHelpers.retryConfigApply;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -13,14 +12,18 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class TestTurret extends SubsystemBase{
      private final TalonFX m_Turret = new TalonFX(kTurretMotorID);
     private final CANcoder m_Encoder = new CANcoder(kTurretCANcoderID);
+
+   private Translation2d robotToHub = new Translation2d();
     
      private double kP = (.5*180)/Math.PI;
      private double target = Math.PI/2;
@@ -30,6 +33,8 @@ public class TestTurret extends SubsystemBase{
      private double offset = 0.327393;
      private double kTestVolts = 2;
      private boolean closedLoop = true;
+     
+     private double angleToHub = 0;
 
      private double tempTarget = 0;
 
@@ -47,6 +52,16 @@ public class TestTurret extends SubsystemBase{
         //position = m_Turret.getPosition().getValue().magnitude();
 
        position = m_Encoder.getAbsolutePosition().getValueAsDouble() * Math.PI*2;
+
+      robotToHub = RobotContainer.getDrivetrain().getState().Pose.getTranslation().minus(redHubPose);
+
+      angleToHub = robotToHub.getAngle().getRadians();
+
+
+
+       
+
+
         
         error = target - position;
 
@@ -102,6 +117,7 @@ public class TestTurret extends SubsystemBase{
         builder.addDoubleProperty("Measured Angle",
         ()->m_Encoder.getAbsolutePosition().getValueAsDouble(),
         null);
+        builder.addDoubleProperty("Angle to Hub", ()-> angleToHub, null);
 
         
 
