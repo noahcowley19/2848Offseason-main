@@ -74,6 +74,8 @@ public class Shooter extends SubsystemBase {
   private double turretFeedforwardRps = 0;
   private boolean setpointClamped = false;
   private Translation2d lastFeedTarget = null;
+  private final VelocityVoltage m_request = new VelocityVoltage(0).withSlot(0);
+
 
   
 
