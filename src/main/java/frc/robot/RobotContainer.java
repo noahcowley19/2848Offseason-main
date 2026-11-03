@@ -21,6 +21,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TestTurret;
 import frc.robot.subsystems.FlyWheel;
+import frc.robot.subsystems.Transition;
 import lombok.Getter;
 import frc.robot.subsystems.TestTurret;
 public class RobotContainer {
@@ -44,6 +45,7 @@ public class RobotContainer {
     public static final TestTurret turret = new TestTurret();
 
     public static final FlyWheel flywheel = new FlyWheel();
+    public static final Transition transition = new Transition();
 
     
     public RobotContainer() {
