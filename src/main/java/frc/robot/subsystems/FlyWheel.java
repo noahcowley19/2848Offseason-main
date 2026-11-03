@@ -21,6 +21,7 @@ public class FlyWheel extends SubsystemBase{
   private final TalonFX m_FlywheelLeftLeader;
   private final TalonFX m_FlywheelRightFollower;
   private final VelocityVoltage m_request = new VelocityVoltage(0).withSlot(0);
+  private final DutyCycleOut test = new DutyCycleOut(kFlywheelLeftMotorID);
 
     public FlyWheel(){
      m_FlywheelLeftLeader = new TalonFX(kFlywheelLeftMotorID);
@@ -62,6 +63,7 @@ public class FlyWheel extends SubsystemBase{
 
    
     }
+    
 }
 
 
