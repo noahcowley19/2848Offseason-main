@@ -20,6 +20,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TestTurret;
+import frc.robot.subsystems.FlyWheel;
 import lombok.Getter;
 import frc.robot.subsystems.TestTurret;
 public class RobotContainer {
@@ -41,6 +42,8 @@ public class RobotContainer {
     //@Getter public static final Shooter shooter = new Shooter();
     @Getter public static final NewVision vision = new NewVision();
     public static final TestTurret turret = new TestTurret();
+
+    public static final FlyWheel flywheel = new FlyWheel();
 
     
     public RobotContainer() {
@@ -94,6 +97,8 @@ public class RobotContainer {
         joystick.povLeft().onTrue(turret.goToDeg(45));
         joystick.povRight().onTrue(turret.goToDeg(-45));
         joystick.povDown().onTrue(turret.goToDeg(5));
+
+        flywheel.setDefaultCommand(Commands.idle(flywheel));
 
     }
 
