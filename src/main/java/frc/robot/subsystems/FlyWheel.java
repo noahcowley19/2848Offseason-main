@@ -46,7 +46,7 @@ public class FlyWheel extends SubsystemBase{
 
     public void periodic(){
 
-        m_FlywheelLeftLeader.setControl(m_request.withVelocity(30));
+        m_FlywheelLeftLeader.setControl(m_request.withVelocity(66));
 
         SmartDashboard.putData(this);
 
