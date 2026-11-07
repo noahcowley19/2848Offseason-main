@@ -30,7 +30,8 @@ public class FlyWheel extends SubsystemBase{
 
     flywheelConfig.Slot0.kS = 0;
     flywheelConfig.Slot0.kV = 0.12;
-    flywheelConfig.Slot0.kP = 0;
+    flywheelConfig.Slot0.kP = 0.9;
+    //flywheelConfig.Slot0.kI = 0.08;
     flywheelConfig.Slot0.kI = 0;
     flywheelConfig.Slot0.kD = 0;
     flywheelConfig.Slot0.kA = 0;
@@ -45,12 +46,17 @@ public class FlyWheel extends SubsystemBase{
 
     public void periodic(){
 
-        m_FlywheelLeftLeader.setControl(m_request.withVelocity(8));
+        m_FlywheelLeftLeader.setControl(m_request.withVelocity(66));
 
         SmartDashboard.putData(this);
 
 
 
+    }
+    public double getError()
+    {
+      double error = Math.abs(66-m_FlywheelLeftLeader.getVelocity().getValueAsDouble());
+      return error;
     }
     @Override
     public void initSendable(SendableBuilder builder) {

@@ -39,71 +39,76 @@ public class TestTurret extends SubsystemBase{
      private double kTestVolts = 2;
      private boolean closedLoop = true;
      
-     private double angleToHub = 0;
-     private double heading = 0;
-     private double correction = 0;
-
-     private double tempTarget = 0;
-
-     public TestTurret() {
-        TalonFXConfiguration config = new TalonFXConfiguration();
-        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
-        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
-
-        config.MotorOutput.Inverted=InvertedValue.Clockwise_Positive;
-        CANcoderConfiguration CANconfig = new CANcoderConfiguration();
-
-        CANconfig.MagnetSensor.SensorDirection=SensorDirectionValue.Clockwise_Positive;
-        CANconfig.MagnetSensor.MagnetOffset = offset;
-        retryConfigApply(()->m_Encoder.getConfigurator().apply(CANconfig));
-        m_Turret.getConfigurator().apply(config);
-     }
-     public void periodic(){
-
-      field.setRobotPose(RobotContainer.getDrivetrain().getState().Pose);
-
-      SmartDashboard.putData(field);
-
-      SmartDashboard.putData(this);
-
-        //position = m_Turret.getPosition().getValue().magnitude();
-
-       position = m_Encoder.getAbsolutePosition().getValueAsDouble() * Math.PI*2;
-
-       heading = RobotContainer.getDrivetrain().getState().Pose.getRotation().getRadians();
-
-
-
-
-      robotToHub = redHubPose.minus(RobotContainer.getDrivetrain().getState().Pose.getTranslation());
-
-      angleToHub = MathUtil.angleModulus(robotToHub.getAngle().getRadians());
-
-      correction = MathUtil.angleModulus(angleToHub-heading);
-
-      setTarget(correction);
-      
-
-
-
-
-
-       
-
-
-        
-        error = target - position;
-
-        dcycOutput = error*kP;
-
-        if(dcycOutput>100)
-            dcycOutput = 100;
-        else if(dcycOutput<-100)
-            dcycOutput = -100;
-
-        // skip closed loop while runVolts is driving the motor
-        if(closedLoop)
-            m_Turret.set(dcycOutput/100);
+         private double angleToHub = 0;
+          private double heading = 0;
+          private double correction = 0;
+     
+          private double tempTarget = 0;
+     
+          public TestTurret() {
+             TalonFXConfiguration config = new TalonFXConfiguration();
+             config.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+             config.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+     
+             config.MotorOutput.Inverted=InvertedValue.Clockwise_Positive;
+             CANcoderConfiguration CANconfig = new CANcoderConfiguration();
+     
+             CANconfig.MagnetSensor.SensorDirection=SensorDirectionValue.Clockwise_Positive;
+             CANconfig.MagnetSensor.MagnetOffset = offset;
+             retryConfigApply(()->m_Encoder.getConfigurator().apply(CANconfig));
+             m_Turret.getConfigurator().apply(config);
+          }
+          public void periodic(){
+     
+           field.setRobotPose(RobotContainer.getDrivetrain().getState().Pose);
+     
+           SmartDashboard.putData(field);
+     
+           SmartDashboard.putData(this);
+     
+             //position = m_Turret.getPosition().getValue().magnitude();
+     
+            position = m_Encoder.getAbsolutePosition().getValueAsDouble() * Math.PI*2;
+     
+            heading = RobotContainer.getDrivetrain().getState().Pose.getRotation().getRadians();
+     
+     
+     
+     
+           robotToHub = redHubPose.minus(RobotContainer.getDrivetrain().getState().Pose.getTranslation());
+     
+           angleToHub = MathUtil.angleModulus(robotToHub.getAngle().getRadians());
+     
+           correction = MathUtil.angleModulus(angleToHub-heading);
+     
+           setTarget(correction);
+           
+     
+     
+     
+     
+     
+            
+     
+     
+             
+             error = target - position;
+     
+             dcycOutput = error*kP;
+     
+             if(dcycOutput>100)
+                 dcycOutput = 100;
+             else if(dcycOutput<-100)
+                 dcycOutput = -100;
+     
+             // skip closed loop while runVolts is driving the motor
+             if(closedLoop)
+                 m_Turret.set(dcycOutput/100);
+          }
+      public double getCorrection()
+      {
+           double correctio1n = MathUtil.angleModulus(angleToHub-heading);
+      return correctio1n;
      }
      public void setTarget(double radians)
      {
@@ -168,6 +173,6 @@ public class TestTurret extends SubsystemBase{
 
     
     
-  
+
 
 
