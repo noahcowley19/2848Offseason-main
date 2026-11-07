@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Value;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Constants.HopperConstants.kForwardBeltMotorID;
 import static frc.robot.Constants.HopperConstants.kSidewaysBeltMotorID;
+
+import java.lang.annotation.Target;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -19,10 +22,15 @@ public class Transition extends SubsystemBase{
 
     private final TalonFX sidewaysMotor;
     private final TalonFX forwardMotor;
+    private final double defaultSpeed = 0;
+
+    private double beltSpeed = .1;
 
 
     public Transition()
     {
+
+        this.register();
         sidewaysMotor = new TalonFX(kSidewaysBeltMotorID);
         forwardMotor = new TalonFX(kForwardBeltMotorID);
         TalonFXConfiguration beltConfig = new TalonFXConfiguration();
@@ -45,22 +53,30 @@ public class Transition extends SubsystemBase{
 
     public void setSpeed(double speed)
     {
-        sidewaysMotor.set(speed);
+
+        beltSpeed = speed;
+        
     }
     public void stop()
     {
-        sidewaysMotor.set(0);
+        beltSpeed=0;
     }
 
     public void periodic()
     {
+        forwardMotor.set(beltSpeed);
         SmartDashboard.putData(this);
     }
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
-        builder.addDoubleProperty("Velocity Output", () -> sidewaysMotor.getVelocity().getValueAsDouble(), null);
-       builder.addDoubleProperty("Voltage", () -> sidewaysMotor.getMotorVoltage().getValueAsDouble(), null);
+        builder.addDoubleProperty("Velocity Output", () -> forwardMotor.getVelocity().getValueAsDouble(), null);
+       builder.addDoubleProperty("Voltage", () -> forwardMotor.getMotorVoltage().getValueAsDouble(), null);
+
+
+       builder.addDoubleProperty("Speed",
+        ()->defaultSpeed,
+        value -> setSpeed(value));
 
     }
 }

@@ -53,7 +53,4 @@ public class Magazine extends SubsystemBase{
     {
         magazineSpeed = 0;
     }
-
-   
-    
 }
