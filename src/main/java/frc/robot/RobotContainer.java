@@ -21,6 +21,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TestTurret;
 import frc.robot.subsystems.FlyWheel;
+import frc.robot.subsystems.Transition;
 import lombok.Getter;
 import frc.robot.subsystems.TestTurret;
 public class RobotContainer {
@@ -41,9 +42,10 @@ public class RobotContainer {
     @Getter public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     //@Getter public static final Shooter shooter = new Shooter();
     @Getter public static final NewVision vision = new NewVision();
-    public static final TestTurret turret = new TestTurret();
+    @Getter public static final TestTurret turret = new TestTurret();
 
-    public static final FlyWheel flywheel = new FlyWheel();
+    @Getter public static final FlyWheel flywheel = new FlyWheel();
+    @Getter public static final Transition transition = new Transition();
 
     
     public RobotContainer() {

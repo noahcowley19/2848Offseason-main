@@ -53,6 +53,11 @@ public class FlyWheel extends SubsystemBase{
 
 
     }
+    public double getError()
+    {
+      double error = Math.abs(66-m_FlywheelLeftLeader.getVelocity().getValueAsDouble());
+      return error;
+    }
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
