@@ -53,6 +53,7 @@ public class Transition extends SubsystemBase{
 
     public void setSpeed(double speed)
     {
+        
 
         beltSpeed = speed;
         //as
