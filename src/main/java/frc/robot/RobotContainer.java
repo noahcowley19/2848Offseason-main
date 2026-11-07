@@ -44,8 +44,8 @@ public class RobotContainer {
     @Getter public static final NewVision vision = new NewVision();
     @Getter public static final TestTurret turret = new TestTurret();
 
-    @Getter public static final FlyWheel flywheel = new FlyWheel();
-    @Getter public static final Transition transition = new Transition();
+    public static final FlyWheel flywheel = new FlyWheel();
+    public static final Transition transition = new Transition();
 
     
     public RobotContainer() {
