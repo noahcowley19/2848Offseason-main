@@ -35,20 +35,17 @@ public class Magazine extends SubsystemBase{
 
     public void periodic()
     {
-
-        magazine.set(0.8);
-        /*double correction = RobotContainer.getTurret().getCorrection();
+        double correction = RobotContainer.getTurret().getCorrection();
         double FlyWheelError = RobotContainer.getFlywheel().getError();
         if(correction<=5 && FlyWheelError<=5)
         {
-            magazineSpeed = 0.8;
+            magazineSpeed = -0.8;
             magazine.set(magazineSpeed);
         }
         else
         {
             magazine.set(0);
-        }*/
-
+        }
 
     }
     // public void setSpeed(double speed)
