@@ -4,10 +4,13 @@ import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -15,9 +18,12 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Constants.ShooterConstants.*;
 import static frc.robot.RangerHelpers.*;
-
-import java.util.function.DoubleSupplier;
 public class FlyWheel extends SubsystemBase{
+private double robotToHub = 0;
+private double angleToHub = 0;
+private Translation2d translation = new Translation2d();
+
+
 
 
   private final TalonFX m_FlywheelLeftLeader;
@@ -48,11 +54,21 @@ public class FlyWheel extends SubsystemBase{
 
     public void periodic(){
 
-        m_FlywheelLeftLeader.setControl(m_request.withVelocity(66));
-        double error = Math.abs(66-m_FlywheelLeftLeader.getVelocity().getValueAsDouble());
-        SmartDashboard.putData(this);
+        
+      angleToHub = RobotContainer.getTurret().getAngleToHub();
+      robotToHub = RobotContainer.getTurret().getDistanceToHub();
+      double height = 1.2; //meters
+      double angle2 = Math.atan(height/robotToHub);
+      double gravity = 9.81;
+      double fVelocity = (robotToHub/Math.cos(angle2))*(Math.sqrt(gravity/(2*(robotToHub*Math.tan(angle2)-1.2))));
+      double motorVelocity = fVelocity * 3/4;
 
+      m_FlywheelLeftLeader.setControl(m_request.withVelocity(motorVelocity));
       
+      SmartDashboard.putData(this);
+
+
+
 
 
 
@@ -67,12 +83,13 @@ public class FlyWheel extends SubsystemBase{
         super.initSendable(builder);
         builder.addDoubleProperty("Velocity Output", () -> m_FlywheelLeftLeader.getVelocity().getValueAsDouble(), null);
        builder.addDoubleProperty("Voltage", () -> m_FlywheelLeftLeader.getMotorVoltage().getValueAsDouble(), null);
-       builder.addDoubleProperty("FWerror", this::getError,null);
 
 
 
    
     }
+
+    
     
 }
 
