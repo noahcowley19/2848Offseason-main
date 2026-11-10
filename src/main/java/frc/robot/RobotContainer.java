@@ -24,6 +24,7 @@ import frc.robot.subsystems.FlyWheel;
 import frc.robot.subsystems.Transition;
 import lombok.Getter;
 import frc.robot.subsystems.TestTurret;
+import frc.robot.subsystems.Magazine;
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -47,6 +48,7 @@ public class RobotContainer {
     @Getter public static final FlyWheel flywheel = new FlyWheel();
     @Getter public static final Transition transition = new Transition();
 
+    @Getter public static final Magazine magazine = new Magazine();
     
     public RobotContainer() {
         configureBindings();
@@ -101,6 +103,8 @@ public class RobotContainer {
         joystick.povDown().onTrue(turret.goToDeg(5));
 
         flywheel.setDefaultCommand(Commands.idle(flywheel));
+        magazine.setDefaultCommand(Commands.idle(magazine));
+
 
     }
 

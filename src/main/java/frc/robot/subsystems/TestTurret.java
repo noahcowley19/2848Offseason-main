@@ -1,14 +1,19 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.ShooterConstants.kTurretCANcoderID;
+import static frc.robot.Constants.ShooterConstants.kTurretCANcoderMagnetSensorConfigs;
 import static frc.robot.Constants.ShooterConstants.kTurretMotorID;
+import static frc.robot.Constants.ShooterConstants.kTurretSwitchForwardLimit;
+import static frc.robot.Constants.ShooterConstants.kTurretSwitchReverseLimit;
 import static frc.robot.Constants.ShooterConstants.redHubPose;
 import static frc.robot.RangerHelpers.retryConfigApply;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -47,11 +52,22 @@ public class TestTurret extends SubsystemBase{
      
           public TestTurret() {
              TalonFXConfiguration config = new TalonFXConfiguration();
-             config.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+             SoftwareLimitSwitchConfigs turretSwitchConfigs = new SoftwareLimitSwitchConfigs();
+             config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+             config.Feedback.FeedbackRemoteSensorID = kTurretCANcoderID;
+             turretSwitchConfigs.ForwardSoftLimitThreshold = kTurretSwitchForwardLimit;
+             turretSwitchConfigs.ReverseSoftLimitThreshold = kTurretSwitchReverseLimit;
+             turretSwitchConfigs.ForwardSoftLimitEnable = true;
+             turretSwitchConfigs.ReverseSoftLimitEnable = true;
+             config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = kTurretSwitchForwardLimit;
+             config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = kTurretSwitchReverseLimit;
+             config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
              config.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
      
              config.MotorOutput.Inverted=InvertedValue.Clockwise_Positive;
              CANcoderConfiguration CANconfig = new CANcoderConfiguration();
+             
+             m_Encoder.getConfigurator().apply(kTurretCANcoderMagnetSensorConfigs);
      
              CANconfig.MagnetSensor.SensorDirection=SensorDirectionValue.Clockwise_Positive;
              CANconfig.MagnetSensor.MagnetOffset = offset;

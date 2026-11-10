@@ -15,6 +15,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Constants.ShooterConstants.*;
 import static frc.robot.RangerHelpers.*;
+
+import java.util.function.DoubleSupplier;
 public class FlyWheel extends SubsystemBase{
 
 
@@ -47,8 +49,10 @@ public class FlyWheel extends SubsystemBase{
     public void periodic(){
 
         m_FlywheelLeftLeader.setControl(m_request.withVelocity(66));
-
+        double error = Math.abs(66-m_FlywheelLeftLeader.getVelocity().getValueAsDouble());
         SmartDashboard.putData(this);
+
+      
 
 
 
@@ -63,6 +67,7 @@ public class FlyWheel extends SubsystemBase{
         super.initSendable(builder);
         builder.addDoubleProperty("Velocity Output", () -> m_FlywheelLeftLeader.getVelocity().getValueAsDouble(), null);
        builder.addDoubleProperty("Voltage", () -> m_FlywheelLeftLeader.getMotorVoltage().getValueAsDouble(), null);
+       builder.addDoubleProperty("FWerror", this::getError,null);
 
 
 
