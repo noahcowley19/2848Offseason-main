@@ -55,22 +55,22 @@ private Translation2d translation = new Translation2d();
     public void periodic(){
 
         
-      angleToHub = RobotContainer.getTurret().getAngleToHub();
-      robotToHub = RobotContainer.getTurret().getDistanceToHub();
-      double height = 1.2; //meters
-      double angle2 = Math.atan(height/robotToHub);
-      double gravity = 9.81;
-      double fVelocity = (robotToHub/Math.cos(angle2))*(Math.sqrt(gravity/(2*(robotToHub*Math.tan(angle2)-1.2))));
-      double motorVelocity = fVelocity * 3/4;
+    double robotToHub = RobotContainer.getTurret().getDistanceToHub(); 
+    double height = 1.2;
+    double gravity = 9.81;
 
-      m_FlywheelLeftLeader.setControl(m_request.withVelocity(motorVelocity));
-      
-      SmartDashboard.putData(this);
+    double launchAngleDegrees = 60.0;
+    double angleRad = Math.toRadians(launchAngleDegrees);
 
+    double denominator = Math.cos(angleRad) * Math.sqrt((2 * (robotToHub * Math.tan(angleRad) - height)) / gravity);
+    double fVelocity = robotToHub / denominator;
 
+    double motorVelocity = fVelocity * (3.0 / 4.0);
 
+    m_FlywheelLeftLeader.setControl(m_request.withVelocity(motorVelocity));
 
-
+    SmartDashboard.putNumber("Shooter/Target Velocity", motorVelocity);
+    SmartDashboard.putNumber("Shooter/Distance to Hub", robotToHub);
 
     }
     public double getError()
