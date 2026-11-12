@@ -83,19 +83,6 @@ public class TestTurret extends SubsystemBase{
      
            setTarget(correction);
 
-
-
-      
-           
-     
-     
-     
-     
-     
-            
-     
-     
-             
              error = target - position;
      
              dcycOutput = error*kP;

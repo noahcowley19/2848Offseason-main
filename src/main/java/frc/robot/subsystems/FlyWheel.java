@@ -27,6 +27,7 @@ private Translation2d translation = new Translation2d();
   private final TalonFX m_FlywheelRightFollower;
   private final VelocityVoltage m_request = new VelocityVoltage(0).withSlot(0);
   private final DutyCycleOut test = new DutyCycleOut(kFlywheelLeftMotorID);
+  private double motorVelocity = 0;
 
     public FlyWheel(){
      m_FlywheelLeftLeader = new TalonFX(kFlywheelLeftMotorID);
@@ -66,13 +67,13 @@ private Translation2d translation = new Translation2d();
     //   if (verticalTerm > 0.01) {
     //     double denominator = Math.cos(angleRad) * Math.sqrt((2.0 * verticalTerm) / gravity);
     //     double fVelocity = robotToHub / denominator;
-      double motorVelocity = fVelocity * (3.0 / 4.0);
+      motorVelocity = fVelocity * (3.0 / 4.0);
 
       m_FlywheelLeftLeader.set(motorVelocity);
     }
     public double getError()
     {
-      double error = Math.abs(66-m_FlywheelLeftLeader.getVelocity().getValueAsDouble());
+      double error = Math.abs(motorVelocity-m_FlywheelLeftLeader.getVelocity().getValueAsDouble());
       return error;
     }
     @Override
