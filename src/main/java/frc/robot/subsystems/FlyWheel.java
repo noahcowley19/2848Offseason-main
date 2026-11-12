@@ -23,9 +23,6 @@ private double robotToHub = 0;
 private double angleToHub = 0;
 private Translation2d translation = new Translation2d();
 
-
-
-
   private final TalonFX m_FlywheelLeftLeader;
   private final TalonFX m_FlywheelRightFollower;
   private final VelocityVoltage m_request = new VelocityVoltage(0).withSlot(0);
@@ -59,22 +56,19 @@ private Translation2d translation = new Translation2d();
       double gravity = 9.81;
       double launchAngleDegrees = 60.0;
       double angleRad = Math.toRadians(launchAngleDegrees);
+      double k = 1;
+      double c = 3;
+      double fVelocity = k*robotToHub+c;
 
-      double verticalTerm = robotToHub * Math.tan(angleRad) - height;
-     double motorVelocity = 0.0;
+    //   double verticalTerm = robotToHub * Math.tan(angleRad) - height;
+    //  double motorVelocity = 0.0;
 
-      if (verticalTerm > 0.01) {
-        double denominator = Math.cos(angleRad) * Math.sqrt((2.0 * verticalTerm) / gravity);
-        double fVelocity = robotToHub / denominator;
-        motorVelocity = fVelocity * (3.0 / 4.0);
-    }
+    //   if (verticalTerm > 0.01) {
+    //     double denominator = Math.cos(angleRad) * Math.sqrt((2.0 * verticalTerm) / gravity);
+    //     double fVelocity = robotToHub / denominator;
+      double motorVelocity = fVelocity * (3.0 / 4.0);
 
-    m_FlywheelLeftLeader.setControl(m_request.withVelocity(motorVelocity));
-
-    SmartDashboard.putNumber("Shooter/Target Velocity", motorVelocity);
-    SmartDashboard.putNumber("Shooter/Distance to Hub", robotToHub);
-
-
+      m_FlywheelLeftLeader.set(motorVelocity);
     }
     public double getError()
     {
@@ -86,14 +80,9 @@ private Translation2d translation = new Translation2d();
         super.initSendable(builder);
         builder.addDoubleProperty("Velocity Output", () -> m_FlywheelLeftLeader.getVelocity().getValueAsDouble(), null);
        builder.addDoubleProperty("Voltage", () -> m_FlywheelLeftLeader.getMotorVoltage().getValueAsDouble(), null);
-
-
-
-   
     }
 
-    
-    
+
 }
 
 
