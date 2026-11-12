@@ -57,8 +57,8 @@ private Translation2d translation = new Translation2d();
       double gravity = 9.81;
       double launchAngleDegrees = 60.0;
       double angleRad = Math.toRadians(launchAngleDegrees);
-      double k = 1;
-      double c = 3;
+      double k = 0.75;
+      double c = 4.4;
       double fVelocity = k*robotToHub+c;
 
     //   double verticalTerm = robotToHub * Math.tan(angleRad) - height;
@@ -70,6 +70,8 @@ private Translation2d translation = new Translation2d();
       motorVelocity = fVelocity * (3.0 / 4.0);
 
       m_FlywheelLeftLeader.set(motorVelocity);
+      SmartDashboard.putNumber("Flywheel Velocity", m_FlywheelLeftLeader.getVelocity().getValueAsDouble());
+      SmartDashboard.putNumber("Flywheel Voltage", m_FlywheelLeftLeader.getMotorVoltage().getValueAsDouble());
     }
     public double getError()
     {
