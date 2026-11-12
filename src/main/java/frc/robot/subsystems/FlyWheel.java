@@ -52,25 +52,28 @@ private Translation2d translation = new Translation2d();
     }
 
 
-    public void periodic(){
+    @Override
+    public void periodic() {
+      double robotToHub = RobotContainer.getTurret().getDistanceToHub();
+      double height = 1.2;
+      double gravity = 9.81;
+      double launchAngleDegrees = 60.0;
+      double angleRad = Math.toRadians(launchAngleDegrees);
 
-        
-    double robotToHub = RobotContainer.getTurret().getDistanceToHub(); 
-    double height = 1.2;
-    double gravity = 9.81;
+      double verticalTerm = robotToHub * Math.tan(angleRad) - height;
+     double motorVelocity = 0.0;
 
-    double launchAngleDegrees = 60.0;
-    double angleRad = Math.toRadians(launchAngleDegrees);
-
-    double denominator = Math.cos(angleRad) * Math.sqrt((2 * (robotToHub * Math.tan(angleRad) - height)) / gravity);
-    double fVelocity = robotToHub / denominator;
-
-    double motorVelocity = fVelocity * (3.0 / 4.0);
+      if (verticalTerm > 0.01) {
+        double denominator = Math.cos(angleRad) * Math.sqrt((2.0 * verticalTerm) / gravity);
+        double fVelocity = robotToHub / denominator;
+        motorVelocity = fVelocity * (3.0 / 4.0);
+    }
 
     m_FlywheelLeftLeader.setControl(m_request.withVelocity(motorVelocity));
 
     SmartDashboard.putNumber("Shooter/Target Velocity", motorVelocity);
     SmartDashboard.putNumber("Shooter/Distance to Hub", robotToHub);
+
 
     }
     public double getError()
